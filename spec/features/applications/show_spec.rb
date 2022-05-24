@@ -1,18 +1,5 @@
 require 'rails_helper'
 
-# # Apply for Pet(s)
-# Visitors to the site will be able to create applications to adopt pets. An application has many pets. Pets can have many applications.
-# Application Show Page
-
-# As a visitor
-# When I visit an applications show page
-# Then I can see the following:
-# - Name of the Applicant
-# - Full Address of the Applicant including street address, city, state, and zip code
-# - Description of why the applicant says they'd be a good home for this pet(s)
-# - names of all pets that this application is for (all names of pets should be links to their show page)
-# - The Application's status, either "In Progress", "Pending", "Accepted", or "Rejected"
-
 RSpec.describe Application, type: :feature do
   describe 'Application Show Page' do
     context 'as a visitor, can see all parameters' do
@@ -33,16 +20,18 @@ RSpec.describe Application, type: :feature do
         visit "/applications/#{@application1.id}"
       end
 
-      it 'also shows status' do
+      it "also shows status and description if app is pending" do
         expect(page).to have_content('Chris')
         expect(page).to have_content('123 Main St')
         expect(page).to have_content('Hometown')
         expect(page).to have_content('CO')
         expect(page).to have_content('00004')
-        within '#current_pets' do
-        expect(page).to have_content('Mr. Biggs')
-        expect(page).to have_content('Spike')
-        expect(page).to_not have_content('Evil Steve')
+        save_and_open_page
+        within "chosen_pets-#{@pet11.id}" do
+          expect(page).to have_content('Mr. Biggs')
+        end
+          within "chosen_pets-#{@pet12.id}" do
+          expect(page).to have_content('Spike')
         end
         expect(page).to have_content('In Progress')
       end

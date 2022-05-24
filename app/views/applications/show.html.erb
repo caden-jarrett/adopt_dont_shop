@@ -6,28 +6,38 @@
 <%= "Description of Worthiness: #{@application.description}"%><br>
 Application status: <strong><%= "#{@application.status}" %></strong><br>
 
-Current pets
-<section id = "current_pets">
-<p><% @application.pet.each do |pet| %>
-  <%= link_to "#{pet.name}", "/pet/#{pet.id}" %><br>
-<% end %></p></section>
+<h2>Pets Selected for Adoption</h2>
+<section id = "chosen_pets">
+  <p><% @application.pet.each do |pet| %>
+    <%= link_to "#{pet.name}", pets_path(:id)%><br>
+    <%# "/pet/#{pet.id}", %>
+  <% end %></section>
+<%# <--- #"/pet/#{pet.id}" ---> %>
+  <% if @application.status == "In Progress"%>
+    <h2>Add a Pet to this Application</h2>
+    <%= form_with url: "/applications/#{@application.id}", method: :search, local: true do |f| %>
+      <%= f.label :search %>
+      <%= f.text_field :search %>
+      <%= f.submit "Search" %>
+    <% end %>
+      <%# <%binding.pry %>
 
-<% if @application.status == "In Progress"%>
-Add a Pet to this Application
-<%= form_with url: "/applications/#{@application.id}", method: :get, local: true do |f| %>
-  <%= f.label :search %>
-  <%= f.text_field :search %>
-  <%= f.submit "Search" %>
-<% end %>
+    <% if @chosen_pets.present? %>
+      <%@chosen_pets.each do |pet| %>
 
-<% if @pets.count != nil%>
-  <p><% @pets.each do |pet| %>
-  <%= link_to "#{pet.name}", "/pet/#{pet.id}" %><br>
-  <%= button_to "Adopt this Pet", "/pet_applications", params: {pet_id: pet.id, application_id: @application.id}, method: :create %>
-<% end %></p>
-<% end %>
+        <section id ="chosen_pets-<% "#{pet.id}" %>">
+        <%= link_to "#{pet.name}", "/pet/#{pet.id}" %><br>
+        <%= button_to "Adopt this Pet", "/pet_applications", params: {pet_id: pet.id, application_id: @application.id}, method: :create %></section>
+      <% end %>
+    <% end %>
+  <% end %>
 
-<% if @application.pet.present? && @application.status == "In Progress" %>
-  <p><%= button_to 'Submit my Application', "/applications/#{@application.id}", method: :get %></p>
-<% end %>
-<% end %>
+
+  <% if @application.pet.present? && @application.status == "In Progress" %>
+    <%= form_with url: "/applications/#{@application.id}", method: :get, local: true do |f| %>  
+      <strong><%= f.label "What makes you think we would let someone like you adopt a pet?" %></strong>
+      <%= f.text_field :description %>
+      <%= f.submit 'Submit my Application'%></p>
+    <% end %>
+  <% end %>
+

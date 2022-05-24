@@ -10,10 +10,12 @@ class ApplicationsController < ApplicationController
       @pets = Pet.search(params[:search])
     end
 
-    @chosen_pets = @application.pet #to make this collection accessible for future stories
-    if @chosen_pets.present?
+    @chosen_pets = @application.pet 
+
+    if @chosen_pets.present? && @application.description.present?
+      @application.update ({description: params[:description]})
       @application.save
-      @application.status_pending #we need to find a way to differentiate the applications which have pets but aren't submitted from the submitted apps. Maybe a indicator variablew with submit app button?
+      @application.status_pending 
     end
   end
 
