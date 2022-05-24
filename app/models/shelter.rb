@@ -8,6 +8,7 @@ class Shelter < ApplicationRecord
   def self.order_by_recently_created
     order(created_at: :desc)
   end
+  
 
   def self.order_by_number_of_pets
     select("shelters.*, count(pets.id) AS pets_count")
