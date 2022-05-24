@@ -4,31 +4,30 @@
 <%= "Street Address: #{@application.street_address}"%><br>
 <%= "City, State Zip: #{@application.city}, #{@application.state}  #{@application.zipcode}"%><br>
 <%= "Description of Worthiness: #{@application.description}"%><br>
+Application status: <strong><%= "#{@application.status}" %></strong><br>
 
 Current pets
-
 <section id = "current_pets">
 <p><% @application.pet.each do |pet| %>
   <%= link_to "#{pet.name}", "/pet/#{pet.id}" %><br>
 <% end %></p></section>
 
-
-Application status: <strong><%= "#{@application.status}" %></strong><br>
+<% if @application.status == "In Progress"%>
 Add a Pet to this Application
-
 <%= form_with url: "/applications/#{@application.id}", method: :get, local: true do |f| %>
   <%= f.label :search %>
   <%= f.text_field :search %>
   <%= f.submit "Search" %>
 <% end %>
 
-<% if @pets.count != nil && @application.status == "In Progress" %>
+<% if @pets.count != nil%>
   <p><% @pets.each do |pet| %>
   <%= link_to "#{pet.name}", "/pet/#{pet.id}" %><br>
-  <%= button_to "Adopt this Pet", "/pet_applications", params: {pet_id: pet.id, application_id: @application.id}, method: :update %>
+  <%= button_to "Adopt this Pet", "/pet_applications", params: {pet_id: pet.id, application_id: @application.id}, method: :create %>
 <% end %></p>
+<% end %>
 
-<% if @application.pet.count > 0 && @application.status == "In Progress" %>
-  <p><%= button_to 'Submit my Application', "/pet_applications/#{:application_id}", method: :patch %></p>
+<% if @application.pet.present? && @application.status == "In Progress" %>
+  <p><%= button_to 'Submit my Application', "/applications/#{@application.id}", method: :get %></p>
 <% end %>
 <% end %>

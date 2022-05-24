@@ -31,6 +31,7 @@ RSpec.describe PetApplication, type: :feature do
     before(:each) do
       @shelter1 = Shelter.create(name: 'Denver Dogs', city: 'Denver', foster_program: true, rank: 9)
       @pet12 = @shelter1.pets.create(name: 'Spike', age: 3, breed: 'doberman', adoptable: true)
+      @pet11 = @shelter1.pets.create(name: 'Mr. Biggs', age: 2, breed: 'Great Dane', adoptable: true)
       @application1 = Application.create!(name: 'Chris', street_address: '123 Main St', city: 'Hometown', state: 'CO', zipcode: "00004")
     end
 
@@ -45,7 +46,17 @@ RSpec.describe PetApplication, type: :feature do
       click_on 'Adopt this Pet'
 
       expect(page).to have_button('Submit my Application')
-      expect(page).to_have content("Pending")
+      expect(page).to have_content("In Progress")
+      binding.pry
+      click_on 'Submit my Application'
+      
+      expect(current_path).to eq("/applications/#{@application1.id}")
+      expect(page).to have_content("Pending")
+      expect(page).to have_content("Spike")
+      expect(page).to_not have_content("Mr. Biggs")
+      expect(page).to_not have_button('Submit my Application')
+      expect(page).to_not have_button('Adopt this Pet')
     end
   end
 end
+

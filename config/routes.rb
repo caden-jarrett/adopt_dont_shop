@@ -6,8 +6,8 @@ Rails.application.routes.draw do
   patch '/applications/:id', to: 'applications#update'
   post '/applications', to: 'applications#create'
 
-  post '/pet_applications', to: 'pet_applications#create'
   patch '/pet_applications/:id', to: 'pet_applications#update'
+  post '/pet_applications', to: 'pet_applications#create'
 
   get '/shelters', to: 'shelters#index'
   get '/shelters/new', to: 'shelters#new'
