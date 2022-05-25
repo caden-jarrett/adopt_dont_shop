@@ -14,4 +14,15 @@ class Application < ApplicationRecord
     update(status: "Pending")
   end
 
+  # def app_status_update(pet_application)
+  #   # binding.pry
+  #   @application = pet_application.application
+  #   pet_apps_stati = @application.pet_applications.pluck(:status)
+  #   if pet_apps_stati.any? == "Denied"
+  #     pet_application.application.update(status: "Rejected")
+  #   elsif pet_apps_stati.all? == "Approved"
+  #     pet_application.application.update(status: "Approved")
+  #   end
+  # end
+
 end
